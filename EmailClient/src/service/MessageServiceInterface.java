@@ -2,12 +2,12 @@ package service;
 
 import java.util.List;
 
-import entity.Message;
+import entity.MyMessage;
 
 public interface MessageServiceInterface {
 	
-	Message findOne(Integer messageId);
+	MyMessage findOne(Integer messageId);
 	
-	List<Message> findAll();
+	List<MyMessage> findAll();
 
 }

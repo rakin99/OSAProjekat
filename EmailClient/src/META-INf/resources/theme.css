@@ -1,0 +1,27 @@
+body {
+	font-family: 'Open Sans Condensed', sans-serif;
+}
+
+#categoryList {
+	margin: 1em 0;
+}
+
+.categoryLink {
+	display: inline-block;
+	background-color: #aaa;
+	margin: 0 1em;
+	padding: 0.3em 1em;
+	font-size: 1.5em;
+	border-radius: 5px;
+	color: #333;
+	text-decoration: none;
+}
+
+.categoryLink:hover { 
+	background-color: #888; 
+	color: #000; 
+}
+
+ol {
+	font-size: 1.5em;
+}

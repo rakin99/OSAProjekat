@@ -12,7 +12,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="messages")
-public class Message {
+public class MyMessage {
 
 	@Id                                 // atribut je deo primarnog kljuca
 	@GeneratedValue(strategy=IDENTITY)  // vrednost se generise automatski, u bazi
@@ -43,7 +43,7 @@ public class Message {
 	@Column(name="unread", unique=false, nullable=false)
 	private boolean unread;
 
-	public Message() {
+	public MyMessage() {
 	}
 
 	public long getId() {
@@ -118,7 +118,7 @@ public class Message {
 		this.unread = unread;
 	}
 	
-	public Message(long id, String _from, String _to, String _cc, String _bcc, Date dateTime, String subject,
+	public MyMessage(long id, String _from, String _to, String _cc, String _bcc, Date dateTime, String subject,
 			String content, boolean unread) {
 		super();
 		this.id = id;

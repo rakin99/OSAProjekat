@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import entity.Message;
+import entity.MyMessage;
 import repository.MessageRepository;
 
 public class MessageService implements MessageServiceInterface{
@@ -13,12 +13,12 @@ public class MessageService implements MessageServiceInterface{
 	MessageRepository messageRepository;
 	
 	@Override
-	public Message findOne(Integer messageId) {
+	public MyMessage findOne(Integer messageId) {
 		return messageRepository.findOne(messageId);
 	}
 	
 	@Override
-	public List<Message> findAll(){
+	public List<MyMessage> findAll(){
 		return messageRepository.findAll();
 	}
 }

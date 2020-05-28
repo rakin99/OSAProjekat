@@ -3,7 +3,7 @@ package dto;
 import java.io.Serializable;
 import java.util.Date;
 
-import entity.Message;
+import entity.MyMessage;
 
 public class MessageDTO implements Serializable{
 
@@ -35,7 +35,7 @@ public class MessageDTO implements Serializable{
 		this.unread = unread;
 	}
 	
-	public MessageDTO(Message message) {
+	public MessageDTO(MyMessage message) {
 		this(message.getId(),message.get_from(),message.get_to(),message.get_cc(),message.get_bcc(),
 				message.getDateTime(),message.getSubject(),message.getContent(),message.isUnread());
 	}

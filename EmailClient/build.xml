@@ -1,4 +1,4 @@
-<project name="Vezbe06" default="deploy" basedir=".">
+<project name="EmailClient" default="deploy" basedir=".">
 	<description>REST i Spring</description>
 
 	<property file="build.properties" />

@@ -1,0 +1,46 @@
+<project name="Vezbe06" default="deploy" basedir=".">
+	<description>REST i Spring</description>
+
+	<property file="build.properties" />
+
+	<path id="compile.classpath">
+		<fileset dir="${compile-libs}" includes="*.jar" />
+	</path>
+	
+	<target name="clean">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+	</target>
+	
+	<target name="init" depends="clean">
+		<mkdir dir="${build}" />
+		<mkdir dir="${dist}" />
+	</target>
+	
+	<target name="compile" depends="init">
+		<javac srcdir="${src}" destdir="${build}" classpathref="compile.classpath"/>
+		<copy file="${src}/application.properties" todir="${build}"/>
+	</target>
+	
+	<target name="war" depends="compile">
+		<mkdir dir="${dist}/static" />
+		<copy tofile="${build}/import.sql" file="${src}/import.sql"/>
+		<copy todir="${dist}/static">
+			<fileset dir="${web}" includes="**"></fileset>
+		</copy>
+		<war destfile="${dist}/${war}" needxmlfile="false">
+			<zipfileset dir="${dist}/static" includes="**" prefix="WEB-INF/classes/static"/>
+			<classes dir="${build}">
+				<include name="**/*" />
+			</classes>
+			<lib dir="${runtime-libs}" />
+		</war>	
+	</target>
+	
+	<target name="deploy" depends="war">
+		<copy todir="${tomcat.dir}/webapps">
+			<fileset dir="${dist}" includes="${war}" />
+		</copy>
+	</target>
+	
+</project>

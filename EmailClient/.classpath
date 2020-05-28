@@ -77,5 +77,10 @@
 	<classpathentry kind="lib" path="runtime-libs/tomcat-juli-8.5.11.jar"/>
 	<classpathentry kind="lib" path="runtime-libs/validation-api-1.1.0.Final.jar"/>
 	<classpathentry kind="lib" path="user libary/javax.mail.jar"/>
+	<classpathentry kind="lib" path="user libary/activation.jar"/>
+	<classpathentry kind="lib" path="user libary/smtp-1.4.4-sources.jar"/>
+	<classpathentry kind="lib" path="user libary/javax.mail-1.4.5.jar"/>
+	<classpathentry kind="lib" path="user libary/activation-1.1.jar"/>
+	<classpathentry kind="lib" path="user libary/smtp-1.4.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

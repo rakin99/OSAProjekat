@@ -14,9 +14,9 @@ public class SendMeil {
       String to = "pantelijacappone@gmail.com";
 
       // Sender's email ID needs to be mentioned
-      String from = "nekimeil";//ovde sam ja postavio stvarnu vrednost
-      final String username = "username";//ovde sam ja postavio stvarnu vrednost
-      final String password = "password";//ovde sam ja postavio stvarnu vrednost
+      String from = "rakindejan@gmail.com";
+      final String username = "rakindejan";//change accordingly
+      final String password = "dlelziaoqgpbcxls";//change accordingly
 
       // Assuming you are sending email through relay.jangosmtp.net
       String host = "smtp.gmail.com";

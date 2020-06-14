@@ -16,7 +16,7 @@ public class SendMeil {
       // Sender's email ID needs to be mentioned
       String from = "rakindejan@gmail.com";
       final String username = "rakindejan";//change accordingly
-      final String password = "dlelziaoqgpbcxls";//change accordingly
+      final String password = "pexlqolkzswsczrj";//change accordingly
 
       // Assuming you are sending email through relay.jangosmtp.net
       String host = "smtp.gmail.com";

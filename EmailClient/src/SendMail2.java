@@ -16,7 +16,7 @@ public class SendMail2 {
   props.put("mail.smtp.auth", "true");
   props.put("mail.smtp.port", "465");
   final String username="rakindejan";
-  final String password="dlelziaoqgpbcxls";//Change accordingly
+  final String password="pexlqolkzswsczrj";//Change accordingly
   Session session = Session.getDefaultInstance(props,
    new javax.mail.Authenticator() {
     protected PasswordAuthentication getPasswordAuthentication() {

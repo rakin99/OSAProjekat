@@ -8,15 +8,25 @@ import javax.mail.NoSuchProviderException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 
-import com.sun.mail.pop3.POP3Store;  
+import com.sun.mail.pop3.POP3Store;
+
+import entity.MyMessage;
+
 import javax.mail.*;
 public class ReadMail{  
   
- public static Message[] receiveEmail(String pop3Host, String storeType,  
+ public static void receiveEmail(String pop3Host, String storeType,  
   final String user, final String password) {  
  	Message[] messages;
-	  try {  
+	  try {
+		  
+	  EntityManagerFactory factory = Persistence.createEntityManagerFactory("Vezbe04");
+	  EntityManager manager = factory.createEntityManager();
 	   //1) get the session object  
 	   Properties properties = new Properties();  
 	   properties.put("mail.store.protocol", "imaps");    
@@ -36,24 +46,33 @@ public class ReadMail{
 	   emailFolder.open(Folder.READ_ONLY);  
 	  
 	   //4) retrieve the messages from the folder in an array and print it  
-	   messages = emailFolder.getMessages();  
-//	   for (int i = 0; i < messages.length; i++) {  
-//	    Message message = messages[i];  
-//	    System.out.println("---------------------------------");  
-//	    System.out.println("Email Number " + (i + 1));  
-//	    System.out.println("Subject: " + message.getSubject());  
-//	    System.out.println("From: " + message.getFrom()[0]);  
-//	    System.out.println("Text: " + message.getContent().toString());  
-//	   }  
+	   messages = emailFolder.getMessages(); 
+	   System.out.println("Pocinjem sa upisivanje Message u bazu!");
+	   for (int i = 0; i < messages.length; i++) {  
+	    Message m = messages[i]; 
+	    MyMessage message=new MyMessage();
+	    message.set_from(m.getFrom()[0].toString());
+	    message.set_to(m.getRecipients(Message.RecipientType.TO)[0].toString());
+	    message.set_cc(m.getRecipients(Message.RecipientType.CC)[0].toString());
+	    message.set_bcc(m.getRecipients(Message.RecipientType.BCC)[0].toString());
+	    message.setDateTime(m.getSentDate());
+	    message.setSubject(m.getSubject());
+	    message.setContent(m.getContent().toString());
+	    message.setUnread(true);
+	    
+	    EntityTransaction tx = manager.getTransaction();
+		tx.begin();
+		manager.persist(message);
+		tx.commit();
+	   }  
+	   System.out.println("Zavrsio sa upisivanjem Message u bazu!");
 	  
 	   //5) close the store and folder objects  
 	   emailFolder.close(false);  
 	   emailStore.close();  
-	   return messages;
 	  } catch (NoSuchProviderException e) {e.printStackTrace();}   
 	  catch (MessagingException e) {e.printStackTrace();}  
-//	  catch (IOException e) {e.printStackTrace();}  
-	  return null;
+  catch (IOException e) {e.printStackTrace();}  
  }  
   
 // public static void main(String[] args) {  
@@ -61,7 +80,7 @@ public class ReadMail{
 //  String host = "smtp.gmail.com";//change accordingly  
 //  String mailStoreType = "pop3";  
 //  final String username= "rakindejan@gmail.com";  
-//  final String password= "dlelziaoqgpbcxls";//change accordingly  
+//  final String password= "pexlqolkzswsczrj";//change accordingly  
 //  
 //  receiveEmail(host, mailStoreType, username, password);  
 //  

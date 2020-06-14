@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,29 +21,32 @@ import javax.mail.MessagingException;
 import dto.MessageDTO;
 import entity.MyMessage;
 import read_send_mail.ReadMail;
+import service.MessageService;
 import service.MessageServiceInterface;
 
+
 @RestController
-@RequestMapping(value="api/messages")
+@RequestMapping(value="/api")
 public class MessageController {
 
 	@Autowired
-	private MessageServiceInterface messageService;
+	private MessageService messageService;
 	
 	@GetMapping
-	public ResponseEntity<List<Message>> getMessages() throws MessagingException, IOException{
-		Message[] m=ReadMail.receiveEmail("smtp.gmail.com", "pop3", "rakindejan@gmail.com", "dlelziaoqgpbcxls");
-		List<Message> messages = new ArrayList<Message>();
-		for (int i = 0; i < m.length; i++) {
-			Message message = m[i];
+	@RequestMapping(value="/messages")
+	public ResponseEntity<List<MyMessage>> getMessages() throws MessagingException, IOException{
+		ReadMail.receiveEmail("smtp.gmail.com", "pop3", "rakindejan@gmail.com", "pexlqolkzswsczrj");
+		List<MyMessage> messages= messageService.findAll();
+		int br=0;
+		for (MyMessage message : messages) {
 			 System.out.println("---------------------------------");  
-			 System.out.println("Email Number " + (i + 1));  
+			 System.out.println("Email Number " + (br++));  
 			 System.out.println("Subject: " + message.getSubject());  
-			 System.out.println("From: " + message.getFrom()[0]);  
-			 System.out.println("Text: " + message.getContent().toString());  
+			 System.out.println("From: " + message.get_from());  
+			 System.out.println("Text: " + message.getContent());  
 			messages.add(message);
 		}
-		return new ResponseEntity<List<Message>>(messages,HttpStatus.OK);
+		return new ResponseEntity<List<MyMessage>>(messages,HttpStatus.OK);
 	}
 	
 	@GetMapping(value="/{id}")

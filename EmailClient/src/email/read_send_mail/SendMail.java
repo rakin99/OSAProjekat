@@ -1,4 +1,4 @@
-package read_send_mail;
+package email.read_send_mail;
 import java.util.Properties;
 
 import javax.mail.Message;

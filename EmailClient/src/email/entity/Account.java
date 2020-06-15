@@ -1,4 +1,4 @@
-package entity;
+package email.entity;
 
 import static javax.persistence.GenerationType.IDENTITY;
 

@@ -1,9 +1,9 @@
-package dto;
+package email.dto;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import entity.MyMessage;
+import email.entity.MyMessage;
 
 public class MessageDTO implements Serializable{
 

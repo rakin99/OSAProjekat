@@ -1,4 +1,4 @@
-package entity;
+package email.entity;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -22,13 +22,13 @@ public class MyMessage {
 	@Column(name="_from", unique=false, nullable=false)
 	private String _from;
 	
-	@Column(name="_to", unique=false, nullable=false)
+	@Column(name="_to", unique=false, nullable=true)
 	private String _to;
 	
-	@Column(name="_cc", unique=false, nullable=false)
+	@Column(name="_cc", unique=false, nullable=true)
 	private String _cc;
 	
-	@Column(name="_bcc", unique=false, nullable=false)
+	@Column(name="_bcc", unique=false, nullable=true)
 	private String _bcc;
 	
 	@Column(name="dateTime", unique=false, nullable=false)
@@ -44,6 +44,7 @@ public class MyMessage {
 	private boolean unread;
 
 	public MyMessage() {
+		
 	}
 
 	public long getId() {
@@ -129,7 +130,7 @@ public class MyMessage {
 	}
 	
 	public String toString() {
-	    return "(Message)[id="+id+",_from="+_from+",_to="+_to+",_cc="+_cc+",_bcc="+_bcc+",dateTime="+dateTime+
+	    return "\n(Message)[id="+id+",_from="+_from+",_to="+_to+",_cc="+_cc+",_bcc="+_bcc+",dateTime="+dateTime+
 	    		",subject="+subject+",content="+content+",unread="+unread+"]";
 	  }
 }

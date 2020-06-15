@@ -1,4 +1,4 @@
-package app;
+package email.app;
 
 import java.io.IOException;
 

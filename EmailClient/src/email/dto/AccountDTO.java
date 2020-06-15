@@ -1,8 +1,8 @@
-package dto;
+package email.dto;
 
 import java.io.Serializable;
 
-import entity.Account;
+import email.entity.Account;
 
 public class AccountDTO implements Serializable{
 

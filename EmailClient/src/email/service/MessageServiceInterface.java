@@ -1,11 +1,11 @@
-package service;
+package email.service;
 
 import java.util.List;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-import entity.MyMessage;
+import email.entity.MyMessage;
 
 
 public interface MessageServiceInterface {

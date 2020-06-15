@@ -1,5 +1,7 @@
-package read_send_mail;
-import java.io.IOException;  
+package email.read_send_mail;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;  
 import javax.mail.Folder;  
 import javax.mail.Message;  
@@ -15,17 +17,18 @@ import javax.persistence.Persistence;
 
 import com.sun.mail.pop3.POP3Store;
 
-import entity.MyMessage;
+import email.entity.MyMessage;
 
 import javax.mail.*;
 public class ReadMail{  
   
- public static void receiveEmail(String pop3Host, String storeType,  
+ public static List<MyMessage> receiveEmail(String pop3Host, String storeType,  
   final String user, final String password) {  
  	Message[] messages;
+ 	List<MyMessage> mess=new ArrayList<MyMessage>();
 	  try {
 		  
-	  EntityManagerFactory factory = Persistence.createEntityManagerFactory("Vezbe04");
+	  EntityManagerFactory factory = Persistence.createEntityManagerFactory("EmailClient");
 	  EntityManager manager = factory.createEntityManager();
 	   //1) get the session object  
 	   Properties properties = new Properties();  
@@ -47,32 +50,40 @@ public class ReadMail{
 	  
 	   //4) retrieve the messages from the folder in an array and print it  
 	   messages = emailFolder.getMessages(); 
-	   System.out.println("Pocinjem sa upisivanje Message u bazu!");
-	   for (int i = 0; i < messages.length; i++) {  
+//	   System.out.println("Pocinjem sa upisivanje Message u bazu!");
+	   for (int i = 0; i < 20; i++) {  
 	    Message m = messages[i]; 
 	    MyMessage message=new MyMessage();
 	    message.set_from(m.getFrom()[0].toString());
-	    message.set_to(m.getRecipients(Message.RecipientType.TO)[0].toString());
-	    message.set_cc(m.getRecipients(Message.RecipientType.CC)[0].toString());
-	    message.set_bcc(m.getRecipients(Message.RecipientType.BCC)[0].toString());
+	    if(m.getRecipients(Message.RecipientType.TO)[0]!=null) {
+	    	message.set_to(m.getRecipients(Message.RecipientType.TO)[0].toString());	
+	    }else if(m.getRecipients(Message.RecipientType.CC)[0]!=null) {
+	    	message.set_cc(m.getRecipients(Message.RecipientType.CC)[0].toString());
+	    }else if(m.getRecipients(Message.RecipientType.BCC)[0]!=null) {
+	    	message.set_bcc(m.getRecipients(Message.RecipientType.BCC)[0].toString());
+	    }
 	    message.setDateTime(m.getSentDate());
 	    message.setSubject(m.getSubject());
 	    message.setContent(m.getContent().toString());
 	    message.setUnread(true);
-	    
-	    EntityTransaction tx = manager.getTransaction();
-		tx.begin();
-		manager.persist(message);
-		tx.commit();
+	    mess.add(message);
+//	    
+//	    EntityTransaction tx = manager.getTransaction();
+//		tx.begin();
+//		manager.persist(message);
+//		tx.commit();
+//		System.out.println("Upisana prva poruka");
 	   }  
-	   System.out.println("Zavrsio sa upisivanjem Message u bazu!");
+//	   System.out.println("Zavrsio sa upisivanjem Message u bazu!");
 	  
 	   //5) close the store and folder objects  
 	   emailFolder.close(false);  
-	   emailStore.close();  
+	   emailStore.close(); 
+	   return mess;
 	  } catch (NoSuchProviderException e) {e.printStackTrace();}   
 	  catch (MessagingException e) {e.printStackTrace();}  
   catch (IOException e) {e.printStackTrace();}  
+	  return null;
  }  
   
 // public static void main(String[] args) {  

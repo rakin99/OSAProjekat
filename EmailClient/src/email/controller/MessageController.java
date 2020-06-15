@@ -1,4 +1,4 @@
-package controller;
+package email.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import email.dto.MessageDTO;
+import email.entity.MyMessage;
+import email.read_send_mail.ReadMail;
+import email.service.MessageService;
+import email.service.MessageServiceInterface;
+
 import javax.mail.Message;
 import javax.mail.MessagingException;
-
-import dto.MessageDTO;
-import entity.MyMessage;
-import read_send_mail.ReadMail;
-import service.MessageService;
-import service.MessageServiceInterface;
 
 
 @RestController
@@ -35,17 +35,17 @@ public class MessageController {
 	@GetMapping
 	@RequestMapping(value="/messages")
 	public ResponseEntity<List<MyMessage>> getMessages() throws MessagingException, IOException{
-		ReadMail.receiveEmail("smtp.gmail.com", "pop3", "rakindejan@gmail.com", "pexlqolkzswsczrj");
-		List<MyMessage> messages= messageService.findAll();
+		List<MyMessage> messages=ReadMail.receiveEmail("smtp.gmail.com", "pop3", "rakindejan@gmail.com", "pexlqolkzswsczrj");
+//		List<MyMessage> messages= messageService.findAll();
 		int br=0;
-		for (MyMessage message : messages) {
-			 System.out.println("---------------------------------");  
-			 System.out.println("Email Number " + (br++));  
-			 System.out.println("Subject: " + message.getSubject());  
-			 System.out.println("From: " + message.get_from());  
-			 System.out.println("Text: " + message.getContent());  
-			messages.add(message);
-		}
+//		for (MyMessage message : messages) {
+//			 System.out.println("---------------------------------");  
+//			 System.out.println("Email Number " + (br++));  
+//			 System.out.println("Subject: " + message.getSubject());  
+//			 System.out.println("From: " + message.get_from());  
+//			 System.out.println("Text: " + message.getContent());  
+//			messages.add(message);
+//		}
 		return new ResponseEntity<List<MyMessage>>(messages,HttpStatus.OK);
 	}
 	

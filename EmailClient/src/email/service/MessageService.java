@@ -1,4 +1,4 @@
-package service;
+package email.service;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Service;
 
-import entity.MyMessage;
-import repository.MessageRepository;
+import email.entity.MyMessage;
+import email.repository.MessageRepository;
 
 @Service
 public class MessageService implements MessageServiceInterface{

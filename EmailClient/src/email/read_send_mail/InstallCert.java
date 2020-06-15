@@ -1,4 +1,4 @@
-package read_send_mail;
+package email.read_send_mail;
 
 import java.io.*;
 import java.net.URL;

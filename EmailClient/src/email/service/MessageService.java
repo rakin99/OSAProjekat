@@ -25,4 +25,16 @@ public class MessageService implements MessageServiceInterface{
 	public List<MyMessage> findAll(){
 		return messageRepository.findAll();
 	}
+
+	@Override
+	public int maxId() {
+		int maxId=messageRepository.findMaxId();
+		return maxId;
+	}
+
+	@Override
+	public long count() {
+		long count=messageRepository.count();
+		return count;
+	}
 }

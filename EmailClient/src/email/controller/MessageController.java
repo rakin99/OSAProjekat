@@ -1,6 +1,7 @@
 package email.controller;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import email.service.MessageServiceInterface;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.internet.MimeMultipart;
 
 
 @RestController
@@ -34,17 +36,27 @@ public class MessageController {
 	
 	@GetMapping
 	@RequestMapping(value="/messages")
-	public ResponseEntity<List<MyMessage>> getMessages() throws MessagingException, IOException{
-		List<MyMessage> messages=ReadMail.receiveEmail("smtp.gmail.com", "pop3", "rakindejan@gmail.com", "pexlqolkzswsczrj");
-//		List<MyMessage> messages= messageService.findAll();
+	public ResponseEntity<List<MyMessage>> getMessages() throws MessagingException, IOException, ParseException{
+		int maxId=0;
+		System.out.println("Broj poruka u bazi je: ");
+		System.out.println(messageService.count());
+		if(messageService.count()!=0) {
+			maxId=messageService.maxId();
+		}
+		System.out.println("Id poslednje poruke je:"+maxId);
+		Message[] mess=ReadMail.receiveEmail("smtp.gmail.com", "pop3", "rakindejan@gmail.com", "pexlqolkzswsczrj",maxId);
+		List<MyMessage> messages= messageService.findAll();
 		int br=0;
 //		for (MyMessage message : messages) {
-//			 System.out.println("---------------------------------");  
-//			 System.out.println("Email Number " + (br++));  
-//			 System.out.println("Subject: " + message.getSubject());  
-//			 System.out.println("From: " + message.get_from());  
-//			 System.out.println("Text: " + message.getContent());  
-//			messages.add(message);
+//			 Message m=mess[(int) (message.getId()-1)];
+//			 String content="";
+//			    if (m.isMimeType("text/plain")) {
+//			    	content = message.getContent().toString();
+//			    } else if (m.isMimeType("multipart/*")) {
+//			        MimeMultipart mimeMultipart = (MimeMultipart) m.getContent();
+//			        content = ReadMail.getTextFromMimeMultipart(mimeMultipart);
+//			    }
+//			 message.setContent(content);
 //		}
 		return new ResponseEntity<List<MyMessage>>(messages,HttpStatus.OK);
 	}

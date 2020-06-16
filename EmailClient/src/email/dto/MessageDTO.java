@@ -2,6 +2,7 @@ package email.dto;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import email.entity.MyMessage;
 
@@ -12,17 +13,17 @@ public class MessageDTO implements Serializable{
 	private String _to; 
 	private String _cc; 
 	private String _bcc; 
-	private Date dateTime; 
+	private GregorianCalendar dateTime; 
 	private String subject;
-	private String content; 
+	private Object content; 
 	private boolean unread;
 	
 	public MessageDTO() {
 		
 	}
 
-	public MessageDTO(long id, String _from, String _to, String _cc, String _bcc, Date dateTime, String subject,
-			String content, boolean unread) {
+	public MessageDTO(long id, String _from, String _to, String _cc, String _bcc, GregorianCalendar dateTime, String subject,
+			Object content, boolean unread) {
 		super();
 		this.id = id;
 		this._from = _from;
@@ -80,11 +81,11 @@ public class MessageDTO implements Serializable{
 		this._bcc = _bcc;
 	}
 
-	public Date getDateTime() {
+	public GregorianCalendar getDateTime() {
 		return dateTime;
 	}
 
-	public void setDateTime(Date dateTime) {
+	public void setDateTime(GregorianCalendar dateTime) {
 		this.dateTime = dateTime;
 	}
 
@@ -96,11 +97,11 @@ public class MessageDTO implements Serializable{
 		this.subject = subject;
 	}
 
-	public String getContent() {
+	public Object getContent() {
 		return content;
 	}
 
-	public void setContent(String content) {
+	public void setContent(Object content) {
 		this.content = content;
 	}
 

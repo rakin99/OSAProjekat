@@ -3,6 +3,7 @@ package email.entity;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,8 +16,8 @@ import javax.persistence.Table;
 public class MyMessage {
 
 	@Id                                 // atribut je deo primarnog kljuca
-	@GeneratedValue(strategy=IDENTITY)  // vrednost se generise automatski, u bazi
-	@Column(name="admin_id", unique=true, nullable=false) 
+										// vrednost se generise automatski, u bazi
+	@Column(name="_id", unique=true, nullable=false) 
 	private long id;
 	
 	@Column(name="_from", unique=false, nullable=false)
@@ -31,24 +32,36 @@ public class MyMessage {
 	@Column(name="_bcc", unique=false, nullable=true)
 	private String _bcc;
 	
-	@Column(name="dateTime", unique=false, nullable=false)
-	private Date dateTime;
+	@Column(name="date_time", unique=false, nullable=false)
+	private GregorianCalendar dateTime;
 	
-	@Column(name="subject", unique=false, nullable=false)
+	@Column(name="_subject", unique=false, nullable=true)
 	private String subject;
 	
-	@Column(name="content", unique=false, nullable=false)
+	@Column(name="content", unique=false, nullable=true, length = 5000)
 	private String content;
 	
 	@Column(name="unread", unique=false, nullable=false)
 	private boolean unread;
 
 	public MyMessage() {
-		
+		this.id=0;
+		this._from="";
+		this._to="";
+		this._cc="";
+		this._bcc="";
+		this.content="";
+		this.dateTime=new GregorianCalendar();
+		this.subject="";
+		this.unread=true;
 	}
 
 	public long getId() {
 		return id;
+	}
+	
+	public void setId(long id) {
+		this.id=id;
 	}
 
 	public String get_from() {
@@ -83,11 +96,11 @@ public class MyMessage {
 		this._bcc = _bcc;
 	}
 
-	public Date getDateTime() {
+	public GregorianCalendar getDateTime() {
 		return dateTime;
 	}
 
-	public void setDateTime(Date dateTime) {
+	public void setDateTime(GregorianCalendar dateTime) {
 		this.dateTime = dateTime;
 	}
 
@@ -115,7 +128,7 @@ public class MyMessage {
 		this.unread = unread;
 	}
 	
-	public MyMessage(long id, String _from, String _to, String _cc, String _bcc, Date dateTime, String subject,
+	public MyMessage(long id, String _from, String _to, String _cc, String _bcc, GregorianCalendar dateTime, String subject,
 			String content, boolean unread) {
 		super();
 		this.id = id;
@@ -130,7 +143,7 @@ public class MyMessage {
 	}
 	
 	public String toString() {
-	    return "\n(Message)[id="+id+",_from="+_from+",_to="+_to+",_cc="+_cc+",_bcc="+_bcc+",dateTime="+dateTime+
+	    return "(Message)[\nid="+id+",_from="+_from+",_to="+_to+",_cc="+_cc+",_bcc="+_bcc+",dateTime="+dateTime+
 	    		",subject="+subject+",content="+content+",unread="+unread+"]";
 	  }
 }

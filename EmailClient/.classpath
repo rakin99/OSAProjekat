@@ -82,5 +82,6 @@
 	<classpathentry kind="lib" path="user libary/javax.mail-1.4.5.jar"/>
 	<classpathentry kind="lib" path="user libary/activation-1.1.jar"/>
 	<classpathentry kind="lib" path="user libary/smtp-1.4.4.jar"/>
+	<classpathentry kind="lib" path="user libary/jsoup-1.11.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

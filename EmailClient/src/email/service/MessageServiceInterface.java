@@ -14,4 +14,7 @@ public interface MessageServiceInterface {
 	
 	List<MyMessage> findAll();
 
+	int maxId();
+	
+	long count();
 }

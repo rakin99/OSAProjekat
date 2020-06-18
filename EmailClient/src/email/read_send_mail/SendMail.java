@@ -1,4 +1,5 @@
 package email.read_send_mail;
+import java.text.ParseException;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -9,8 +10,11 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import email.entity.MyMessage;
+import email.tools.DateUtil;
+
 public class SendMail {
-   public static void main(String[] args) {
+   public static void send(MyMessage myMessage) throws ParseException {
       // Recipient's email ID needs to be mentioned.
       String to = "pantelijacappone@gmail.com";
 
@@ -41,18 +45,31 @@ public class SendMail {
     Message message = new MimeMessage(session);
  
     // Set From: header field of the header.
-    message.setFrom(new InternetAddress(from));
+    message.setFrom(new InternetAddress(myMessage.get_from()));
  
-    // Set To: header field of the header.
-    message.setRecipients(Message.RecipientType.TO,
-               InternetAddress.parse(to));
+    if(!myMessage.get_to().equals("")) {
+        // Set To: header field of the header.
+        message.setRecipients(Message.RecipientType.TO,
+                   InternetAddress.parse(myMessage.get_to()));
+    }
+ 
+    if(!myMessage.get_cc().equals("")) {
+    	message.setRecipients(Message.RecipientType.CC,
+                InternetAddress.parse(myMessage.get_cc()));
+    }
+    
+    if(!myMessage.get_bcc().equals("")) {
+    	message.setRecipients(Message.RecipientType.BCC,
+                InternetAddress.parse(myMessage.get_bcc()));
+    }
  
     // Set Subject: header field
-    message.setSubject("Testing Subject");
- 
+    message.setSubject(myMessage.getSubject());
+    
+    message.setSentDate(DateUtil.getDateFromGregorianCalendar(myMessage.getDateTime()));
+    
     // Now set the actual message
-    message.setText("Hello, this is sample for to check send " +
-  "email using JavaMailAPI ");
+    message.setText(myMessage.getContent());
 
     // Send message
     Transport.send(message);

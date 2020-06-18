@@ -1,5 +1,6 @@
 package email.service;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.springframework.context.annotation.Configuration;
@@ -10,11 +11,15 @@ import email.entity.MyMessage;
 
 public interface MessageServiceInterface {
 	
-	MyMessage findOne(Integer messageId);
+	MyMessage findById(long messageId);
+	
+	GregorianCalendar getMaxDate();
 	
 	List<MyMessage> findAll();
 
 	int maxId();
 	
 	long count();
+	
+	MyMessage save(MyMessage message);
 }

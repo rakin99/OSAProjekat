@@ -1,10 +1,12 @@
 package email.dto;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 import email.entity.MyMessage;
+import email.tools.DateUtil;
 
 public class MessageDTO implements Serializable{
 
@@ -15,15 +17,16 @@ public class MessageDTO implements Serializable{
 	private String _bcc; 
 	private GregorianCalendar dateTime; 
 	private String subject;
-	private Object content; 
+	private String content; 
 	private boolean unread;
+	private boolean active;
 	
 	public MessageDTO() {
 		
 	}
 
 	public MessageDTO(long id, String _from, String _to, String _cc, String _bcc, GregorianCalendar dateTime, String subject,
-			Object content, boolean unread) {
+			String content, boolean unread, boolean active) {
 		super();
 		this.id = id;
 		this._from = _from;
@@ -34,11 +37,12 @@ public class MessageDTO implements Serializable{
 		this.subject = subject;
 		this.content = content;
 		this.unread = unread;
+		this.active=active;
 	}
 	
-	public MessageDTO(MyMessage message) {
+	public MessageDTO(MyMessage message) throws ParseException {
 		this(message.getId(),message.get_from(),message.get_to(),message.get_cc(),message.get_bcc(),
-				message.getDateTime(),message.getSubject(),message.getContent(),message.isUnread());
+				message.getDateTime(),message.getSubject(),message.getContent(),message.isUnread(),message.isActive());
 	}
 
 	public long getId() {
@@ -81,12 +85,12 @@ public class MessageDTO implements Serializable{
 		this._bcc = _bcc;
 	}
 
-	public GregorianCalendar getDateTime() {
-		return dateTime;
+	public String getDateTime() throws ParseException {
+		return DateUtil.formatTimeWithSecond(this.dateTime);
 	}
 
-	public void setDateTime(GregorianCalendar dateTime) {
-		this.dateTime = dateTime;
+	public void setDateTime(String dateTime) throws ParseException {
+		this.dateTime = DateUtil.convertFromDMYHMS(dateTime);
 	}
 
 	public String getSubject() {
@@ -97,11 +101,11 @@ public class MessageDTO implements Serializable{
 		this.subject = subject;
 	}
 
-	public Object getContent() {
+	public String getContent() {
 		return content;
 	}
 
-	public void setContent(Object content) {
+	public void setContent(String content) {
 		this.content = content;
 	}
 
@@ -111,6 +115,14 @@ public class MessageDTO implements Serializable{
 
 	public void setUnread(boolean unread) {
 		this.unread = unread;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 }

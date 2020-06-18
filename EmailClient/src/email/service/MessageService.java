@@ -1,5 +1,6 @@
 package email.service;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,8 @@ public class MessageService implements MessageServiceInterface{
 	MessageRepository messageRepository;
 	
 	@Override
-	public MyMessage findOne(Integer messageId) {
-		return messageRepository.findOne(messageId);
+	public MyMessage findById(long messageId) {
+		return messageRepository.findById(messageId);
 	}
 	
 	@Override
@@ -36,5 +37,15 @@ public class MessageService implements MessageServiceInterface{
 	public long count() {
 		long count=messageRepository.count();
 		return count;
+	}
+	
+	@Override
+	public MyMessage save(MyMessage message) {
+		return messageRepository.save(message);
+	}
+
+	@Override
+	public GregorianCalendar getMaxDate() {
+		return messageRepository.getMaxDate();
 	}
 }

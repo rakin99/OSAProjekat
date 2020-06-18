@@ -113,6 +113,12 @@ public class DateUtil {
     	return calendar;
     }
     
+    public static Date getDateFromGregorianCalendar(GregorianCalendar date) throws ParseException {
+    	Date calendar=new Date();
+    	calendar.setTime(date.getTimeInMillis());
+    	return calendar;
+    }
+    
     public static GregorianCalendar getNow() throws ParseException {
         String mesec="";
         String dan="";
@@ -127,6 +133,26 @@ public class DateUtil {
         sat=String.valueOf(danasnjiDatum.get(GregorianCalendar.HOUR_OF_DAY));
         minut=String.valueOf(danasnjiDatum.get(GregorianCalendar.MINUTE));
         sekund=String.valueOf(danasnjiDatum.get(GregorianCalendar.SECOND));
+        System.out.println(formatTimeWithSecond(danasnjiDatum));
+        return danasnjiDatum;
+    }
+    
+    public static GregorianCalendar getLastOneHour() throws ParseException {
+        String mesec="";
+        String dan="";
+        String godina="";
+        String sat="";
+        String minut="";
+        String sekund="";
+        GregorianCalendar danasnjiDatum=new GregorianCalendar();
+        mesec=String.valueOf(danasnjiDatum.get(GregorianCalendar.MONTH));
+        dan=String.valueOf(danasnjiDatum.get(GregorianCalendar.DAY_OF_MONTH));
+        godina=String.valueOf(danasnjiDatum.get(GregorianCalendar.YEAR));
+        sat=String.valueOf(danasnjiDatum.get(GregorianCalendar.HOUR_OF_DAY)-1);
+        minut=String.valueOf(danasnjiDatum.get(GregorianCalendar.MINUTE));
+        sekund=String.valueOf(danasnjiDatum.get(GregorianCalendar.SECOND));
+        danasnjiDatum.set(Integer.parseInt(godina), Integer.parseInt(mesec), Integer.parseInt(dan), 
+        		Integer.parseInt(sat), Integer.parseInt(minut), Integer.parseInt(sekund));
         System.out.println(formatTimeWithSecond(danasnjiDatum));
         return danasnjiDatum;
     }

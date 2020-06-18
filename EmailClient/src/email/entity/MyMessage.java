@@ -2,7 +2,7 @@ package email.entity;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
-import java.util.Date;
+import java.text.ParseException;
 import java.util.GregorianCalendar;
 
 import javax.persistence.Column;
@@ -11,12 +11,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+
 @Entity
 @Table(name="messages")
 public class MyMessage {
 
 	@Id                                 // atribut je deo primarnog kljuca
-										// vrednost se generise automatski, u bazi
+	@GeneratedValue(strategy=IDENTITY)	// vrednost se generise automatski, u bazi
 	@Column(name="_id", unique=true, nullable=false) 
 	private long id;
 	
@@ -38,11 +39,14 @@ public class MyMessage {
 	@Column(name="_subject", unique=false, nullable=true)
 	private String subject;
 	
-	@Column(name="content", unique=false, nullable=true, length = 5000)
+	@Column(name="content", unique=false, nullable=true, length = 10000)
 	private String content;
 	
 	@Column(name="unread", unique=false, nullable=false)
-	private boolean unread;
+	private boolean unread=true;
+	
+	@Column(name="active", unique = false, nullable = false)
+	private boolean active;
 
 	public MyMessage() {
 		this.id=0;
@@ -54,6 +58,7 @@ public class MyMessage {
 		this.dateTime=new GregorianCalendar();
 		this.subject="";
 		this.unread=true;
+		active=true;
 	}
 
 	public long getId() {
@@ -96,7 +101,7 @@ public class MyMessage {
 		this._bcc = _bcc;
 	}
 
-	public GregorianCalendar getDateTime() {
+	public GregorianCalendar getDateTime() throws ParseException {
 		return dateTime;
 	}
 
@@ -128,18 +133,12 @@ public class MyMessage {
 		this.unread = unread;
 	}
 	
-	public MyMessage(long id, String _from, String _to, String _cc, String _bcc, GregorianCalendar dateTime, String subject,
-			String content, boolean unread) {
-		super();
-		this.id = id;
-		this._from = _from;
-		this._to = _to;
-		this._cc = _cc;
-		this._bcc = _bcc;
-		this.dateTime = dateTime;
-		this.subject = subject;
-		this.content = content;
-		this.unread = unread;
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 	public String toString() {

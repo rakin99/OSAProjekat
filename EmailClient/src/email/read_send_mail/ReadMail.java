@@ -27,7 +27,7 @@ import javax.mail.*;
 public class ReadMail{  
   
  public static void receiveEmail(String pop3Host, String storeType,  
-  final String user, final String password,GregorianCalendar maxDateTime,long count) throws ParseException {  
+  final String username, final String password,GregorianCalendar maxDateTime,long count) throws ParseException {  
  	Message[] messages;
  	List<MyMessage> mess=new ArrayList<MyMessage>();
 	  try {
@@ -40,12 +40,12 @@ public class ReadMail{
 	    Session emailSession = Session.getDefaultInstance(properties,
 	   new javax.mail.Authenticator() {
 	    protected PasswordAuthentication getPasswordAuthentication() {
-	     return new PasswordAuthentication(user,password);
+	     return new PasswordAuthentication(username,password);
 	    }
 	   }); 
 	   //2) create the POP3 store object and connect with the pop server  
 	   Store emailStore = emailSession.getStore("imaps");
-	 emailStore.connect("imap.gmail.com","rakindejan@gmail.com", password);
+	 emailStore.connect("imap."+pop3Host,username+"@"+pop3Host, password);
 	    
 	  
 	   //3) create the folder object and open it  

@@ -8,36 +8,42 @@ public class AccountDTO implements Serializable{
 
 	private long id;
 	private String smtpAddress;
-	private int smtp;
+	private int smtpPort;
 	private short inServerType;
 	private String inServerAddress;
 	private int inServerPort;
 	private String username;
 	private String password;
 	private String displayName;
+	private boolean active;
 	
 	public AccountDTO() {
 		super();
+		this.smtpPort = 0;
+		this.inServerType = 0;
+		this.inServerPort = 0;
+		this.displayName = "";
 	}
 
 	public AccountDTO(long id, String smtpAddress, int smtp, short inServerType, String inServerAddress,
-			int inServerPort, String username, String password, String displayName) {
+			int inServerPort, String username, String password, String displayName,boolean active) {
 		super();
 		this.id = id;
 		this.smtpAddress = smtpAddress;
-		this.smtp = smtp;
+		this.smtpPort = smtp;
 		this.inServerType = inServerType;
 		this.inServerAddress = inServerAddress;
 		this.inServerPort = inServerPort;
 		this.username = username;
 		this.password = password;
 		this.displayName = displayName;
+		this.active=active;
 	}
 	
 	public AccountDTO(Account account) {
-		this(account.getId(),account.getSmtpAddress(),account.getSmtp(),account.getInServerType(),
+		this(account.getId(),account.getSmtpAddress(),account.getSmtpPort(),account.getInServerType(),
 				account.getInServerAddress(),account.getInServerPort(),account.getUsername(),
-				account.getPassword(),account.getDisplayname());
+				account.getPassword(),account.getDisplayname(),account.isActive());
 	}
 
 	public long getId() {
@@ -56,12 +62,12 @@ public class AccountDTO implements Serializable{
 		this.smtpAddress = smtpAddress;
 	}
 
-	public int getSmtp() {
-		return smtp;
+	public int getSmtpPort() {
+		return smtpPort;
 	}
 
-	public void setSmtp(int smtp) {
-		this.smtp = smtp;
+	public void setSmtpPort(int smtp) {
+		this.smtpPort = smtp;
 	}
 
 	public short getInServerType() {
@@ -111,5 +117,15 @@ public class AccountDTO implements Serializable{
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
+	
 	
 }

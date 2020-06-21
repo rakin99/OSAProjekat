@@ -1,21 +1,32 @@
-package service;
+package email.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import entity.Account;
-import repository.AccountRepository;
+import email.entity.Account;
+import email.repository.AccountRepository;
 
 @Service
-public class AccountService implements AccountServiceInteface{
+public class AccountService implements AccountServiceInterface{
 
 	@Autowired
 	AccountRepository accountRepository;
 	
 	@Override
-	public Account findByUsername(String username){
-		Account account = accountRepository.findByUsername(username);
+	public Account findByUsername(String username) {
+		Account account=accountRepository.findByUsername(username);
 		return account;
 	}
 	
+	@Override
+	public Account save(Account account) {
+		return accountRepository.save(account);
+	}
+
+	@Override
+	public Account findByPassword(String password) {
+		Account account=accountRepository.findByPassword(password);
+		return account;
+	}
+
 }

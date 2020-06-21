@@ -34,8 +34,8 @@ public class MessageService implements MessageServiceInterface{
 	}
 
 	@Override
-	public long count() {
-		long count=messageRepository.count();
+	public long count(String username) {
+		long count=messageRepository.count(username);
 		return count;
 	}
 	

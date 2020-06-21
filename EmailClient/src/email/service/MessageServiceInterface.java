@@ -19,7 +19,7 @@ public interface MessageServiceInterface {
 
 	int maxId();
 	
-	long count();
+	long count(String username);
 	
 	MyMessage save(MyMessage message);
 }

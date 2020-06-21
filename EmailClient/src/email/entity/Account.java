@@ -5,11 +5,12 @@ import static javax.persistence.GenerationType.IDENTITY;
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
+@Entity
 @Table(name="accounts")
 public class Account implements Serializable{
 	
@@ -22,8 +23,10 @@ public class Account implements Serializable{
 	@Column(name="smtpAddress", unique=false, nullable=false)
 	private String smtpAddress;
 	
+	@Column(name="smtpPort", unique=false, nullable=false)
+	private int smtpPort;
+	
 	@Column(name="inServerType", unique=false, nullable=false)
-	private int smtp;
 	private short inServerType;
 	
 	@Column(name="inServerAddress", unique=false, nullable=false)
@@ -41,12 +44,15 @@ public class Account implements Serializable{
 	
 	@Column(name="displayname", unique=false, nullable=false)
 	private String displayname;
+	
+	@Column(name="active", unique=false, nullable=false)
+	private boolean active;
 
 	public Account(long id, String smtpAddress, int smtp, short inServerType, String inServerAddress, int inServerPort ,String username, 
 			String password, String displayName) {
 		this.id=id;
 		this.smtpAddress=smtpAddress;
-		this.smtp=smtp;
+		this.smtpPort=smtp;
 		this.inServerType=inServerType;
 		this.inServerAddress=inServerAddress;
 		this.inServerPort=inServerPort;
@@ -56,6 +62,17 @@ public class Account implements Serializable{
 	}
 	
 	public Account() {
+		
+		this.id=0;
+		this.smtpAddress="";
+		this.smtpPort=0;
+		this.inServerType=0;
+		this.inServerAddress="";
+		this.inServerPort=0;
+		this.username="";
+		this.password="";
+		this.displayname="";
+		this.active=true;
 	}
 	
 	public long getId() {
@@ -74,12 +91,12 @@ public class Account implements Serializable{
 		this.smtpAddress = smtpAddress;
 	}
 
-	public int getSmtp() {
-		return smtp;
+	public int getSmtpPort() {
+		return smtpPort;
 	}
 
-	public void setSmtp(int smtp) {
-		this.smtp = smtp;
+	public void setSmtpPort(int smtp) {
+		this.smtpPort = smtp;
 	}
 
 	public short getInServerType() {
@@ -130,8 +147,18 @@ public class Account implements Serializable{
 		this.displayname = displayname;
 	}
 	
+	
+	
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
 	public String toString() {
-	    return "(Account)[id="+id+",smtpAddress="+smtpAddress+",smtp="+smtp+"inServerType="+inServerType+",inServerAddress="+inServerAddress+
+	    return "(Account)[id="+id+",smtpAddress="+smtpAddress+",smtp="+smtpPort+"inServerType="+inServerType+",inServerAddress="+inServerAddress+
 	    		",inServerPort="+inServerPort+",username="+username+",password="+password+",displayname="+displayname+"]";
 	  }
 }

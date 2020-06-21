@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import email.dto.MessageDTO;
+import email.entity.Account;
 import email.entity.MyMessage;
 import email.read_send_mail.ReadMail;
 import email.read_send_mail.SendMail;
+import email.service.AccountService;
 import email.service.MessageService;
 import email.service.MessageServiceInterface;
 import email.tools.DateUtil;
@@ -39,18 +41,22 @@ public class MessageController {
 
 	@Autowired
 	private MessageService messageService;
+	@Autowired
+	private AccountService accountService;
 	
 	@GetMapping
-	@RequestMapping(value="/messages")
-	public ResponseEntity<List<MessageDTO>> getMessages() throws MessagingException, IOException, ParseException{
+	@RequestMapping(value="/messages/{username}")
+	public ResponseEntity<List<MessageDTO>> getMessages(@PathVariable("username") String username) throws MessagingException, IOException, ParseException{
+		Account account=accountService.findByUsername(username);
 		GregorianCalendar dateTime=DateUtil.getLastOneHour();
-		long count=messageService.count();
-		System.out.println("\nBroj poruka u bazi je: "+messageService.count()+"\n");
+		System.out.println("\nUsername: "+username+"<--------------------");
+		long count=messageService.count(username);
+		System.out.println("\nBroj poruka u bazi je: "+messageService.count(username)+"\n");
 		if(count!=0) {
 			dateTime=messageService.getMaxDate();
 		}
 		System.out.println("Vreme poslednje poruke je:"+DateUtil.formatTimeWithSecond(dateTime));
-		ReadMail.receiveEmail("smtp.gmail.com", "pop3", "rakindejan@gmail.com", "pexlqolkzswsczrj",dateTime,count);
+		ReadMail.receiveEmail(account.getSmtpAddress(), account.getInServerAddress(), account.getUsername(), account.getPassword(),dateTime,count);
 		List<MyMessage> messages= messageService.findAll();
 		List<MessageDTO> messagesDTO=new ArrayList<MessageDTO>();
 		for (MyMessage myMessage : messages) {
@@ -61,8 +67,8 @@ public class MessageController {
 		return new ResponseEntity<List<MessageDTO>>(messagesDTO,HttpStatus.OK);
 	}
 	
-	@GetMapping(value="/messages/{id}")
-	public ResponseEntity<MessageDTO> getProduct(@PathVariable("id") Integer id) throws ParseException{
+	@GetMapping(value="/messages/{username}/{id}")
+	public ResponseEntity<MessageDTO> getMessage(@PathVariable("username") String username,@PathVariable("id") Integer id) throws ParseException{
 		MyMessage message = messageService.findById(id);
 		if(message == null){
 			return new ResponseEntity<MessageDTO>(HttpStatus.NOT_FOUND);
@@ -72,7 +78,7 @@ public class MessageController {
 	}
 	
 	@PostMapping(consumes="application/json", value = "/messages")
-	public ResponseEntity<MessageDTO> saveProduct(@RequestBody MessageDTO messageDTO) throws ParseException{
+	public ResponseEntity<MessageDTO> saveMessage(@RequestBody MessageDTO messageDTO) throws ParseException{
 		System.out.println("\nPoceo slanje poruke!<-------------------------\n");
 		System.out.println("\nCC JE:!"+messageDTO.get_cc()+"<-------------------------\n");
 		MyMessage message = new MyMessage();
@@ -90,7 +96,7 @@ public class MessageController {
 	}
 	
 	@DeleteMapping(value="/messages/{id}")
-	public ResponseEntity<Void> deleteProduct(@PathVariable("id") Long id){
+	public ResponseEntity<Void> deleteMessage(@PathVariable("id") Long id){
 		System.out.println("\nPocinjem sa trazenjem poruke za brisanje! <----------------------------------------\n");
 		MyMessage myMessage = messageService.findById(id);
 		if (myMessage != null){

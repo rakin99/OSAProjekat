@@ -1,6 +1,7 @@
 package email.repository;
 
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,5 +27,8 @@ public interface MessageRepository extends JpaRepository<MyMessage, Integer>{
 	GregorianCalendar getMaxDate();
 	
 	MyMessage findById(long id);
+	
+	@Query("FROM MyMessage WHERE _to LIKE concat('%',:username,'%')")
+	List<MyMessage> findAllMessage(@Param("username") String username);
 	
 }

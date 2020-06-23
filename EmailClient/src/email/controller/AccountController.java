@@ -27,12 +27,9 @@ public class AccountController {
 	@RequestMapping(value = "/accounts/{username}/{password}")
 	public ResponseEntity<AccountDTO> getAccount(@PathVariable("username") String username,@PathVariable("password") String password) throws ParseException{
 		System.out.println("\nPocinjem da trazim account!<----------------------\n");
-		Account a1 = accountService.findByUsername(username);
-		Account a2 = accountService.findByPassword(password);
-		if(a1 != null || a2!=null){
-			if(a1.getUsername().equals(a2.getUsername()) && a1.getPassword().equals(a2.getPassword())) {
-				return new ResponseEntity<AccountDTO>(new AccountDTO(a1), HttpStatus.OK);
-			}
+		Account a1 = accountService.findByUsernameAndPassword(username,password);
+		if(a1 != null){
+			return new ResponseEntity<AccountDTO>(new AccountDTO(a1), HttpStatus.OK);
 		}
 		
 		return new ResponseEntity<AccountDTO>(HttpStatus.NOT_FOUND);
@@ -41,22 +38,22 @@ public class AccountController {
 	@PostMapping(consumes = "application/json", value = "/accounts")
 	public ResponseEntity<AccountDTO> saveAccount(@RequestBody AccountDTO accountDTO){
 		Account a1 = accountService.findByUsername(accountDTO.getUsername());
-		if(a1==null) {
-			System.out.println("\nPoceo upisivanje account-a<----------------\n");
-			Account account=new Account();
-			account.setActive(accountDTO.isActive());
-			account.setDisplayname(accountDTO.getDisplayName());
-			account.setInServerAddress(accountDTO.getInServerAddress());
-			account.setInServerPort(accountDTO.getInServerPort());
-			account.setInServerType(accountDTO.getInServerType());
-			account.setPassword(accountDTO.getPassword());
-			account.setSmtpAddress(accountDTO.getSmtpAddress());
-			account.setSmtpPort(accountDTO.getSmtpPort());
-			account.setUsername(accountDTO.getUsername());
-			
-			account=accountService.save(account);
-			return new ResponseEntity<AccountDTO>(new AccountDTO(account), HttpStatus.CREATED);
+		if(a1!=null && a1.getUsername().equals(accountDTO.getUsername()) && a1.getSmtpAddress().equals(accountDTO.getSmtpAddress())) {
+			return new ResponseEntity<AccountDTO>(HttpStatus.NO_CONTENT);
 		}
-		return new ResponseEntity<AccountDTO>(HttpStatus.NO_CONTENT);
+		System.out.println("\nPoceo upisivanje account-a<----------------\n");
+		Account account=new Account();
+		account.setActive(accountDTO.isActive());
+		account.setDisplayname(accountDTO.getDisplayName());
+		account.setInServerAddress(accountDTO.getInServerAddress());
+		account.setInServerPort(accountDTO.getInServerPort());
+		account.setInServerType(accountDTO.getInServerType());
+		account.setPassword(accountDTO.getPassword());
+		account.setSmtpAddress(accountDTO.getSmtpAddress());
+		account.setSmtpPort(accountDTO.getSmtpPort());
+		account.setUsername(accountDTO.getUsername());
+		
+		account=accountService.save(account);
+		return new ResponseEntity<AccountDTO>(new AccountDTO(account), HttpStatus.CREATED);
 	}
 }

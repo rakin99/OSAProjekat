@@ -23,8 +23,8 @@ public class MessageService implements MessageServiceInterface{
 	}
 	
 	@Override
-	public List<MyMessage> findAll(){
-		return messageRepository.findAll();
+	public List<MyMessage> findAllMessage(String username){
+		return messageRepository.findAllMessage(username);
 	}
 
 	@Override

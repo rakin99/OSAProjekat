@@ -47,9 +47,10 @@ public class MessageController {
 	@GetMapping
 	@RequestMapping(value="/messages/{username}")
 	public ResponseEntity<List<MessageDTO>> getMessages(@PathVariable("username") String username) throws MessagingException, IOException, ParseException{
-		Account account=accountService.findByUsername(username);
+		System.out.println("\nUsername je: "+username+"<---------------------------------------\n");
+		Account account=accountService.findByUsername(username.split("@")[0]);
 		GregorianCalendar dateTime=DateUtil.getLastOneHour();
-		System.out.println("\nUsername: "+username+"<--------------------");
+		System.out.println("\nUsername: "+account.getUsername());
 		long count=messageService.count(username);
 		System.out.println("\nBroj poruka u bazi je: "+messageService.count(username)+"\n");
 		if(count!=0) {
@@ -57,7 +58,8 @@ public class MessageController {
 		}
 		System.out.println("Vreme poslednje poruke je:"+DateUtil.formatTimeWithSecond(dateTime));
 		ReadMail.receiveEmail(account.getSmtpAddress(), account.getInServerAddress(), account.getUsername(), account.getPassword(),dateTime,count);
-		List<MyMessage> messages= messageService.findAll();
+		List<MyMessage> messages= messageService.findAllMessage(username);
+		System.out.println("\n\n\n\nBroj poruka: "+messages.size());
 		List<MessageDTO> messagesDTO=new ArrayList<MessageDTO>();
 		for (MyMessage myMessage : messages) {
 			if(myMessage.isActive()) {
@@ -80,7 +82,8 @@ public class MessageController {
 	@PostMapping(consumes="application/json", value = "/messages")
 	public ResponseEntity<MessageDTO> saveMessage(@RequestBody MessageDTO messageDTO) throws ParseException{
 		System.out.println("\nPoceo slanje poruke!<-------------------------\n");
-		System.out.println("\nCC JE:!"+messageDTO.get_cc()+"<-------------------------\n");
+		System.out.println("\nContent je: "+messageDTO.getContent()+"<-------------------------\n");
+		Account account=accountService.findByUsername(messageDTO.get_from().split("@")[0]);
 		MyMessage message = new MyMessage();
 		message.set_from(messageDTO.get_from());
 		message.set_to(messageDTO.get_to());
@@ -89,7 +92,7 @@ public class MessageController {
 		message.setDateTime(DateUtil.convertFromDMYHMS(messageDTO.getDateTime()));
 		message.setSubject(messageDTO.getSubject());
 		message.setContent(messageDTO.getContent());
-		SendMail.send(message);
+		SendMail.send(message,account);
 	
 		message = messageService.save(message);
 		return new ResponseEntity<MessageDTO>(new MessageDTO(message), HttpStatus.CREATED);	

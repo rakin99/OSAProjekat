@@ -9,4 +9,6 @@ public interface AccountServiceInterface {
 	Account findByPassword(String password);
 
 	Account save(Account account);
+	
+	Account findByUsernameAndPassword(String username,String password);
 }

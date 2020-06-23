@@ -27,16 +27,25 @@ import javax.mail.*;
 public class ReadMail{  
   
  public static void receiveEmail(String pop3Host, String storeType,  
-  final String username, final String password,GregorianCalendar maxDateTime,long count) throws ParseException {  
+  final String username, final String pass,GregorianCalendar maxDateTime,long count) throws ParseException {  
  	Message[] messages;
- 	List<MyMessage> mess=new ArrayList<MyMessage>();
+ 	String password=proveraPassworda(pass);
+ 	System.out.println("\nPassword: "+password+"<----------\n");
+ 	String prom="imaps";
+ 	String prom2="imap.";
+ 	//List<MyMessage> mess=new ArrayList<MyMessage>();
 	  try {
-		  
+		  Properties properties = new Properties(); 
+		  if(pop3Host.equals("yahoo.com")) {
+		    	pop3Host="mail."+pop3Host;
+		    	properties.put("mail.pop3.port", "993");
+		    }
+		  System.out.println("\npop3Host"+pop3Host+"<-----------------\n");
 	  EntityManagerFactory factory = Persistence.createEntityManagerFactory("EmailClient");
 	  EntityManager manager = factory.createEntityManager();
 	   //1) get the session object  
-	   Properties properties = new Properties();  
-	   properties.put("mail.store.protocol", "imaps");    
+	  
+	   properties.put("mail.store.protocol", prom);    
 	    Session emailSession = Session.getDefaultInstance(properties,
 	   new javax.mail.Authenticator() {
 	    protected PasswordAuthentication getPasswordAuthentication() {
@@ -44,8 +53,9 @@ public class ReadMail{
 	    }
 	   }); 
 	   //2) create the POP3 store object and connect with the pop server  
-	   Store emailStore = emailSession.getStore("imaps");
-	 emailStore.connect("imap."+pop3Host,username+"@"+pop3Host, password);
+	    
+	   Store emailStore = emailSession.getStore(prom);
+	 emailStore.connect(prom2+pop3Host,username+"@"+pop3Host, password);
 	    
 	  
 	   //3) create the folder object and open it  
@@ -125,6 +135,13 @@ public class ReadMail{
 	    }
 	    return result;
 	}
+ 
+ public static String proveraPassworda(String pass) {
+	 int count = pass.lastIndexOf("|");
+	 System.out.println("index | je: "+count+"<-----------------------------\n");
+	 String returnValue=pass.substring(count+1);
+	 return returnValue;
+ }
 
 // public static void main(String[] args) {  
 //  

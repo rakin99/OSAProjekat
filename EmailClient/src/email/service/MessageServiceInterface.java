@@ -15,7 +15,7 @@ public interface MessageServiceInterface {
 	
 	GregorianCalendar getMaxDate();
 	
-	List<MyMessage> findAll();
+	List<MyMessage> findAllMessage(String username);
 
 	int maxId();
 	

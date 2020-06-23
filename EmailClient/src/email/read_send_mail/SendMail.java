@@ -10,27 +10,25 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import email.entity.Account;
 import email.entity.MyMessage;
 import email.tools.DateUtil;
 
 public class SendMail {
-   public static void send(MyMessage myMessage) throws ParseException {
+   public static void send(MyMessage myMessage,Account account) throws ParseException {
       // Recipient's email ID needs to be mentioned.
-      String to = "pantelijacappone@gmail.com";
 
       // Sender's email ID needs to be mentioned
-      String from = "rakindejan@gmail.com";
-      final String username = "rakindejan";//change accordingly
-      final String password = "pexlqolkzswsczrj";//change accordingly
+      final String username = account.getUsername()+"@"+account.getSmtpAddress();//change accordingly
+      final String password = ReadMail.proveraPassworda(account.getPassword());//change accordingly
 
       // Assuming you are sending email through relay.jangosmtp.net
-      String host = "smtp.gmail.com";
-
+//025793117|qacuhygtjzorzokq
         Properties props = new Properties();
-  props.put("mail.smtp.auth", "true");
-  props.put("mail.smtp.starttls.enable", "true");
-  props.put("mail.smtp.host", "smtp.gmail.com");
-  props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp."+account.getInServerAddress());
+        props.put("mail.smtp.port", "587");
 
       // Get the Session object.
       Session session = Session.getInstance(props,
@@ -45,7 +43,7 @@ public class SendMail {
     Message message = new MimeMessage(session);
  
     // Set From: header field of the header.
-    message.setFrom(new InternetAddress(myMessage.get_from()));
+    message.setFrom(new InternetAddress(username));
  
     if(!myMessage.get_to().equals("")) {
         // Set To: header field of the header.

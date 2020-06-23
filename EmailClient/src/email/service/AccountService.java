@@ -29,4 +29,10 @@ public class AccountService implements AccountServiceInterface{
 		return account;
 	}
 
+	@Override
+	public Account findByUsernameAndPassword(String username, String password) {
+		Account account=accountRepository.findByUsernameAndPassword(username,password);
+		return account;
+	}
+
 }

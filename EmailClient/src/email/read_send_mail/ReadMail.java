@@ -74,7 +74,8 @@ public class ReadMail{
 	    GregorianCalendar datumPorukeSaNeta=DateUtil.getGregorianCalendarFromDate(m.getSentDate());
 	    System.out.println("Proveravam: "+i+" poruku.");
 	    System.out.println("Poruka je poslata: "+DateUtil.formatTimeWithSecond(datumPorukeSaNeta));
-	    if(DateUtil.CompareDate(datumPorukeSaNeta, maxDateTime)) {
+	    System.out.println("Poruka je poslata: "+DateUtil.formatTimeWithSecond(maxDateTime));
+	    if(datumPorukeSaNeta.getTimeInMillis()>maxDateTime.getTimeInMillis()) {
 	    	MyMessage message=new MyMessage();
 		    message.set_from(m.getFrom()[0].toString());
 		    if(m.getRecipients(Message.RecipientType.TO)[0]!=null) {

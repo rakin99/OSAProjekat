@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,6 +34,7 @@ import email.tools.DateUtil;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMultipart;
+import javax.ws.rs.Path;
 
 
 @RestController
@@ -66,6 +68,10 @@ public class MessageController {
 				messagesDTO.add(new MessageDTO(myMessage));
 			}
 		}
+		if(messages.size()!=0) {
+			System.out.println("\n\nSaljem poruku sa Id-om: "+messages.get(messages.size()-1).getId()+"<<--------------------------\n");
+		}
+		
 		return new ResponseEntity<List<MessageDTO>>(messagesDTO,HttpStatus.OK);
 	}
 	
@@ -75,7 +81,7 @@ public class MessageController {
 		if(message == null){
 			return new ResponseEntity<MessageDTO>(HttpStatus.NOT_FOUND);
 		}
-		
+		System.out.println("\n\nSaljem poruku sa Id-om: "+message.getId()+"<<--------------------------\n");
 		return new ResponseEntity<MessageDTO>(new MessageDTO(message), HttpStatus.OK);
 	}
 	
@@ -96,6 +102,31 @@ public class MessageController {
 	
 		message = messageService.save(message);
 		return new ResponseEntity<MessageDTO>(new MessageDTO(message), HttpStatus.CREATED);	
+	}
+	
+	@PutMapping(value="/messages/{id}", consumes="application/json")
+	public ResponseEntity<MessageDTO> updateMessage(@RequestBody MessageDTO messageDTO, @PathVariable("id") long id) throws ParseException{
+		System.out.println("\n\nAzuriram poruku...."+messageDTO.getId());
+		MyMessage message=messageService.findById(id);
+		if(message==null) {
+			return new ResponseEntity<MessageDTO>(HttpStatus.BAD_REQUEST);
+		}
+		message.setId(messageDTO.getId());
+		message.set_from(messageDTO.get_from());
+		message.set_to(messageDTO.get_to());
+		message.set_cc(messageDTO.get_cc());
+		message.set_bcc(messageDTO.get_bcc());
+		message.setDateTime(DateUtil.convertFromDMYHMS(messageDTO.getDateTime()));
+		message.setSubject(messageDTO.getSubject());
+		message.setContent(messageDTO.getContent());
+		message.setUnread(messageDTO.isUnread());
+		message.setActive(messageDTO.isActive());
+		
+		message=messageService.save(message);
+		System.out.println("\n\nVracam poruku sa Id-om"+message.getId());
+		
+		return new ResponseEntity<MessageDTO>(new MessageDTO(message), HttpStatus.OK);
+		
 	}
 	
 	@DeleteMapping(value="/messages/{id}")

@@ -109,7 +109,7 @@ public class DateUtil {
     }
     
     public static GregorianCalendar getGregorianCalendarFromDate(Date date) throws ParseException {
-    	GregorianCalendar calendar=new GregorianCalendar(date.getYear()+1900,date.getMonth(), date.getDate(),date.getHours(),date.getMinutes(),date.getSeconds());
+    	GregorianCalendar calendar=new GregorianCalendar(date.getYear()+1900,date.getMonth(), date.getDate(),date.getHours(),date.getMinutes());
     	return calendar;
     }
     

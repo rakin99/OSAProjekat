@@ -9,6 +9,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
@@ -47,6 +49,10 @@ public class MyMessage {
 	
 	@Column(name="active", unique = false, nullable = false)
 	private boolean active;
+	
+	@ManyToOne
+	@JoinColumn(name="account_id", referencedColumnName="account_id", nullable=false)
+	private Account account;
 
 	public MyMessage() {
 		this.id=0;
@@ -141,6 +147,14 @@ public class MyMessage {
 		this.active = active;
 	}
 	
+	public Account getAccount() {
+		return account;
+	}
+
+	public void setAccount(Account account) {
+		this.account = account;
+	}
+
 	public String toString() {
 	    return "(Message)[\nid="+id+",_from="+_from+",_to="+_to+",_cc="+_cc+",_bcc="+_bcc+",dateTime="+dateTime+
 	    		",subject="+subject+",content="+content+",unread="+unread+"]";

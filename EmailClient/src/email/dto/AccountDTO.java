@@ -1,8 +1,13 @@
 package email.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import email.entity.Account;
+import email.entity.MyMessage;
 
 public class AccountDTO implements Serializable{
 
@@ -16,6 +21,7 @@ public class AccountDTO implements Serializable{
 	private String password;
 	private String displayName;
 	private boolean active;
+	
 	
 	public AccountDTO() {
 		super();
@@ -125,7 +131,5 @@ public class AccountDTO implements Serializable{
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	
-	
 	
 }

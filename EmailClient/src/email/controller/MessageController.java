@@ -56,11 +56,32 @@ public class MessageController {
 		long count=messageService.count(username);
 		System.out.println("\nBroj poruka u bazi je: "+messageService.count(username)+"\n");
 		if(count!=0) {
-			dateTime=messageService.getMaxDate();
+			dateTime=messageService.getMaxDate(username);
 		}
 		System.out.println("Vreme poslednje poruke je:"+DateUtil.formatTimeWithSecond(dateTime));
-		ReadMail.receiveEmail(account.getSmtpAddress(), account.getInServerAddress(), account.getUsername(), account.getPassword(),dateTime,count);
-		List<MyMessage> messages= messageService.findAllMessage(username);
+		ReadMail.receiveEmail(account.getSmtpAddress(), account.getInServerAddress(), account,dateTime,count,"INBOX",messageService);
+		List<MyMessage> messages= messageService.findByAccount(account);
+		System.out.println("\n\n\n\nBroj poruka: "+messages.size());
+		List<MessageDTO> messagesDTO=new ArrayList<MessageDTO>();
+		for (MyMessage myMessage : messages) {
+			if(myMessage.isActive()) {
+				messagesDTO.add(new MessageDTO(myMessage));
+			}
+		}
+		if(messages.size()!=0) {
+			System.out.println("\n\nSaljem poruku sa Id-om: "+messages.get(messages.size()-1).getId()+"<<--------------------------\n");
+		}
+		
+		return new ResponseEntity<List<MessageDTO>>(messagesDTO,HttpStatus.OK);
+	}
+	
+	@GetMapping
+	@RequestMapping(value="/messages/sent-messages/{username}")
+	public ResponseEntity<List<MessageDTO>> getSentMessages(@PathVariable("username") String username) throws MessagingException, IOException, ParseException{
+		System.out.println("Trazim poslate poruke...");
+		Account account=accountService.findByUsername(username.split("@")[0]);
+		System.out.println("\nUsername: "+account.getUsername());
+		List<MyMessage> messages= messageService.findAllSentMessage(username);
 		System.out.println("\n\n\n\nBroj poruka: "+messages.size());
 		List<MessageDTO> messagesDTO=new ArrayList<MessageDTO>();
 		for (MyMessage myMessage : messages) {
@@ -111,16 +132,7 @@ public class MessageController {
 		if(message==null) {
 			return new ResponseEntity<MessageDTO>(HttpStatus.BAD_REQUEST);
 		}
-		message.setId(messageDTO.getId());
-		message.set_from(messageDTO.get_from());
-		message.set_to(messageDTO.get_to());
-		message.set_cc(messageDTO.get_cc());
-		message.set_bcc(messageDTO.get_bcc());
-		message.setDateTime(DateUtil.convertFromDMYHMS(messageDTO.getDateTime()));
-		message.setSubject(messageDTO.getSubject());
-		message.setContent(messageDTO.getContent());
 		message.setUnread(messageDTO.isUnread());
-		message.setActive(messageDTO.isActive());
 		
 		message=messageService.save(message);
 		System.out.println("\n\nVracam poruku sa Id-om"+message.getId());

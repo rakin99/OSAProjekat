@@ -20,19 +20,24 @@ import javax.persistence.Persistence;
 
 import com.sun.mail.pop3.POP3Store;
 
+import email.entity.Account;
 import email.entity.MyMessage;
+import email.service.MessageService;
 import email.tools.DateUtil;
 
 import javax.mail.*;
 public class ReadMail{  
   
  public static void receiveEmail(String pop3Host, String storeType,  
-  final String username, final String pass,GregorianCalendar maxDateTime,long count) throws ParseException {  
+  Account account,GregorianCalendar maxDateTime,long count,String folder,MessageService messageService) throws ParseException {  
  	Message[] messages;
- 	String password=proveraPassworda(pass);
+ 	String password=proveraPassworda(account.getPassword());
  	System.out.println("\nPassword: "+password+"<----------\n");
  	String prom="imaps";
  	String prom2="imap.";
+ 	String to="";
+ 	String cc="";
+ 	String bcc="";
  	//List<MyMessage> mess=new ArrayList<MyMessage>();
 	  try {
 		  Properties properties = new Properties(); 
@@ -41,25 +46,23 @@ public class ReadMail{
 		    	properties.put("mail.pop3.port", "993");
 		    }
 		  System.out.println("\npop3Host"+pop3Host+"<-----------------\n");
-	  EntityManagerFactory factory = Persistence.createEntityManagerFactory("EmailClient");
-	  EntityManager manager = factory.createEntityManager();
 	   //1) get the session object  
 	  
 	   properties.put("mail.store.protocol", prom);    
 	    Session emailSession = Session.getDefaultInstance(properties,
 	   new javax.mail.Authenticator() {
 	    protected PasswordAuthentication getPasswordAuthentication() {
-	     return new PasswordAuthentication(username,password);
+	     return new PasswordAuthentication(account.getUsername(),password);
 	    }
 	   }); 
 	   //2) create the POP3 store object and connect with the pop server  
 	    
 	   Store emailStore = emailSession.getStore(prom);
-	 emailStore.connect(prom2+pop3Host,username+"@"+pop3Host, password);
+	 emailStore.connect(prom2+pop3Host,account.getUsername()+"@"+pop3Host, password);
 	    
 	  
 	   //3) create the folder object and open it  
-	   Folder emailFolder = emailStore.getFolder("INBOX");  
+	   Folder emailFolder = emailStore.getFolder(folder);  
 	   emailFolder.open(Folder.READ_ONLY);  
 	  
 	   //4) retrieve the messages from the folder in an array and print it  
@@ -68,23 +71,67 @@ public class ReadMail{
 	   if(count!=0) {
 		   start=messages.length-(int)count;
 	   }
-	   System.out.println("Pocinjem sa upisivanjem mejlova!");
+	   
 	   for (int i=start; i < messages.length; i++) {  
 	    Message m = messages[i]; 
 	    GregorianCalendar datumPorukeSaNeta=DateUtil.getGregorianCalendarFromDate(m.getSentDate());
 	    System.out.println("Proveravam: "+i+" poruku.");
-	    System.out.println("Poruka je poslata: "+DateUtil.formatTimeWithSecond(datumPorukeSaNeta));
-	    System.out.println("Poruka je poslata: "+DateUtil.formatTimeWithSecond(maxDateTime));
+	    System.out.println("datumPorukeSaNeta je poslata: "+DateUtil.formatTimeWithSecond(datumPorukeSaNeta));
+	    System.out.println("maxDateTime je poslata: "+DateUtil.formatTimeWithSecond(maxDateTime));
 	    if(datumPorukeSaNeta.getTimeInMillis()>maxDateTime.getTimeInMillis()) {
+	    	System.out.println("Postoji nova poruka! \nPocinjem sa upisivanjem!");
 	    	MyMessage message=new MyMessage();
-		    message.set_from(m.getFrom()[0].toString());
-		    if(m.getRecipients(Message.RecipientType.TO)[0]!=null) {
-		    	message.set_to(m.getRecipients(Message.RecipientType.TO)[0].toString());	
-		    }else if(m.getRecipients(Message.RecipientType.CC)[0]!=null) {
-		    	message.set_cc(m.getRecipients(Message.RecipientType.CC)[0].toString());
-		    }else if(m.getRecipients(Message.RecipientType.BCC)[0]!=null) {
-		    	message.set_bcc(m.getRecipients(Message.RecipientType.BCC)[0].toString());
-		    }
+	    	String from="";
+	    	System.out.println("From: "+m.getFrom()[0].toString());
+	    	if(m.getFrom()[0].toString().contains("<")){
+	    		String[] mail=m.getFrom()[0].toString().split("<");
+	    		from=mail[1].substring(0, mail[1].length()-1);
+	    	}else {
+	    		from=m.getFrom()[0].toString();
+	    	}
+	    	message.set_from(from);
+	    	if(m.getRecipients(Message.RecipientType.TO)!=null) {
+	    		 for (int j=0; j<m.getRecipients(Message.RecipientType.TO).length; j++) {
+	    			 System.out.println("Prvi email u To je: "+m.getRecipients(Message.RecipientType.TO)[j].toString());
+	    			 if(m.getRecipients(Message.RecipientType.TO)[j].toString().contains("<")) {
+				    		String[] mail=m.getRecipients(Message.RecipientType.TO)[j].toString().split("<");
+				    			to=to+mail[1].substring(0, mail[1].length()-1)+",";
+				    	}else {
+				    			to=to+m.getRecipients(Message.RecipientType.TO)[j].toString()+",";
+				    	}
+	 		    }
+	    	}
+	    	if(m.getRecipients(Message.RecipientType.CC)!=null) {
+			    for (int j=0; j<m.getRecipients(Message.RecipientType.CC).length; j++) {
+			    	if(m.getRecipients(Message.RecipientType.CC)[j].toString().contains("<")) {
+			    		String[] mail=m.getRecipients(Message.RecipientType.CC)[j].toString().split("<");
+			    			cc=cc+mail[1].substring(0, mail[1].length()-1)+",";
+			    	}else {
+			    			cc=cc+m.getRecipients(Message.RecipientType.CC)[j].toString()+",";
+			    	}
+			    }
+	    	}
+	    	if(m.getRecipients(Message.RecipientType.BCC)!=null) {
+			    for (int j=0; j<m.getRecipients(Message.RecipientType.BCC).length; j++) {
+			    	if(j==(m.getRecipients(Message.RecipientType.BCC).length-1)) {
+			    		bcc=bcc+m.getRecipients(Message.RecipientType.BCC)[j].toString();
+		    		}else {
+		    			bcc=bcc+m.getRecipients(Message.RecipientType.BCC)[j].toString()+",";
+		    		}
+			    }
+	    	}
+	    	if(!to.equals("")) {
+	    		to=to.substring(0,to.length()-1);
+	    	}
+	    	if(!cc.equals("")) {
+	    		cc=cc.substring(0,cc.length()-1);
+	    	}
+	    	if(!bcc.equals("")) {
+	    		bcc=bcc.substring(0,bcc.length()-1);
+	    	}
+		    message.set_to(to);
+		    message.set_cc(cc);
+		    message.set_bcc(bcc);
 		    message.setDateTime(DateUtil.getGregorianCalendarFromDate(m.getSentDate()));
 		    message.setSubject(m.getSubject());
 		    String content="";
@@ -98,11 +145,10 @@ public class ReadMail{
 		    System.out.println("Duzina contenta: "+content.length());
 		    System.out.println("Content: "+content);
 		    message.setContent(content);
+		    message.setAccount(account);
+		    account.getMessages().add(message);
 		    System.out.println("Upisujem mejl!");
-		    EntityTransaction tx = manager.getTransaction();
-			tx.begin();
-			manager.persist(message);
-			tx.commit();
+	    	messageService.save(message);
 			System.out.println(i+". poruka je upisana.");
 	    }
 	   }  

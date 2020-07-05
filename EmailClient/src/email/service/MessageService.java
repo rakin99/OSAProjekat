@@ -2,12 +2,14 @@ package email.service;
 
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Service;
 
+import email.entity.Account;
 import email.entity.MyMessage;
 import email.repository.MessageRepository;
 
@@ -23,8 +25,8 @@ public class MessageService implements MessageServiceInterface{
 	}
 	
 	@Override
-	public List<MyMessage> findAllMessage(String username){
-		return messageRepository.findAllMessage(username);
+	public List<MyMessage> findByAccount(Account account){
+		return messageRepository.findByAccount(account);
 	}
 
 	@Override
@@ -45,7 +47,12 @@ public class MessageService implements MessageServiceInterface{
 	}
 
 	@Override
-	public GregorianCalendar getMaxDate() {
-		return messageRepository.getMaxDate();
+	public GregorianCalendar getMaxDate(String username) {
+		return messageRepository.getMaxDate(username);
+	}
+
+	@Override
+	public List<MyMessage> findAllSentMessage(String username) {
+		return messageRepository.findAllSentMessage(username);
 	}
 }

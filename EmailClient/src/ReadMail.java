@@ -29,7 +29,7 @@ public class ReadMail{
     
   
    //3) create the folder object and open it  
-   Folder emailFolder = emailStore.getFolder("INBOX");  
+   Folder emailFolder = emailStore.getFolder("SENT");  
    emailFolder.open(Folder.READ_ONLY);  
   
    //4) retrieve the messages from the folder in an array and print it  

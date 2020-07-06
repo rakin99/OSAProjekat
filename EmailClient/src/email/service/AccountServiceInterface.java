@@ -1,6 +1,9 @@
 package email.service;
 
+import java.util.List;
+
 import email.entity.Account;
+import email.entity.User;
 
 public interface AccountServiceInterface {
 	
@@ -11,4 +14,6 @@ public interface AccountServiceInterface {
 	Account save(Account account);
 	
 	Account findByUsernameAndPassword(String username,String password);
+	
+	List<Account> findByUser(User user);
 }

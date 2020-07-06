@@ -49,7 +49,7 @@ public class MessageController {
 	@GetMapping
 	@RequestMapping(value="/messages/{username}")
 	public ResponseEntity<List<MessageDTO>> getMessages(@PathVariable("username") String username) throws MessagingException, IOException, ParseException{
-		System.out.println("\nUsername je: "+username+"<---------------------------------------\n");
+		System.out.println("\n\nPokusavam naci poruke za: "+username+"<---------------------------------------\n");
 		Account account=accountService.findByUsername(username.split("@")[0]);
 		GregorianCalendar dateTime=DateUtil.getLastOneHour();
 		System.out.println("\nUsername: "+account.getUsername());
@@ -65,7 +65,9 @@ public class MessageController {
 		List<MessageDTO> messagesDTO=new ArrayList<MessageDTO>();
 		for (MyMessage myMessage : messages) {
 			if(myMessage.isActive()) {
-				messagesDTO.add(new MessageDTO(myMessage));
+				if(!myMessage.get_from().equals(account.getUsername()+"@"+account.getSmtpAddress())) {
+					messagesDTO.add(new MessageDTO(myMessage));
+				}
 			}
 		}
 		if(messages.size()!=0) {
@@ -119,6 +121,7 @@ public class MessageController {
 		message.setDateTime(DateUtil.convertFromDMYHMS(messageDTO.getDateTime()));
 		message.setSubject(messageDTO.getSubject());
 		message.setContent(messageDTO.getContent());
+		message.setAccount(account);
 		SendMail.send(message,account);
 	
 		message = messageService.save(message);

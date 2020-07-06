@@ -1,9 +1,12 @@
 package email.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import email.entity.Account;
+import email.entity.User;
 import email.repository.AccountRepository;
 
 @Service
@@ -33,6 +36,11 @@ public class AccountService implements AccountServiceInterface{
 	public Account findByUsernameAndPassword(String username, String password) {
 		Account account=accountRepository.findByUsernameAndPassword(username,password);
 		return account;
+	}
+
+	@Override
+	public List<Account> findByUser(User user) {
+		return accountRepository.findByUser(user);
 	}
 
 }

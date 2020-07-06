@@ -8,6 +8,7 @@ import java.util.Set;
 
 import email.entity.Account;
 import email.entity.MyMessage;
+import email.entity.User;
 
 public class AccountDTO implements Serializable{
 
@@ -21,6 +22,7 @@ public class AccountDTO implements Serializable{
 	private String password;
 	private String displayName;
 	private boolean active;
+	private User user;
 	
 	
 	public AccountDTO() {
@@ -131,5 +133,12 @@ public class AccountDTO implements Serializable{
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
 }

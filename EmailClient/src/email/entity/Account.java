@@ -12,6 +12,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -55,6 +57,11 @@ public class Account implements Serializable{
 	
 	@OneToMany(cascade={ALL}, fetch=LAZY, mappedBy="account")
 	private List<MyMessage> messages = new ArrayList<MyMessage>();
+	
+	
+	@ManyToOne
+	@JoinColumn(name="user_id", referencedColumnName="user_id", nullable=false)
+	private User user;
 
 	public Account(long id, String smtpAddress, int smtp, short inServerType, String inServerAddress, int inServerPort ,String username, 
 			String password, String displayName) {
@@ -170,6 +177,15 @@ public class Account implements Serializable{
 	public void setActive(boolean active) {
 		this.active = active;
 	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	public String toString() {
 	    return "(Account)[id="+id+",smtpAddress="+smtpAddress+",smtp="+smtpPort+"inServerType="+inServerType+",inServerAddress="+inServerAddress+
 	    		",inServerPort="+inServerPort+",username="+username+",password="+password+",displayname="+displayname+"]";

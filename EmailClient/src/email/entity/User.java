@@ -1,15 +1,21 @@
 package email.entity;
 
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Column;
-
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+@Entity
 @Table(name="users")
 public class User implements Serializable{
 
@@ -29,6 +35,12 @@ public class User implements Serializable{
 	
 	@Column(name="lastname", unique=false, nullable=false)
 	private String lastname;
+	
+	@Column(name="active", unique=false, nullable = false)
+	private boolean active=true;
+	
+	@OneToMany(cascade={ALL}, fetch=LAZY, mappedBy="user")
+	private List<Account> accounts = new ArrayList<Account>();
 	
 	public User() {
 	}
@@ -82,6 +94,22 @@ public class User implements Serializable{
 		this.lastname = lastname;
 	}
 	
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public List<Account> getAccounts() {
+		return accounts;
+	}
+
+	public void setAccounts(List<Account> accounts) {
+		this.accounts = accounts;
+	}
+
 	public String toString() {
 	    return "(User)[id="+id+",username="+username+",password="+password+",firstname="+firstname+",lastname="+lastname+"]";
 	  }

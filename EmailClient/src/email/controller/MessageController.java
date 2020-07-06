@@ -46,10 +46,10 @@ public class MessageController {
 	@Autowired
 	private AccountService accountService;
 	
-	@GetMapping
-	@RequestMapping(value="/messages/{username}")
-	public ResponseEntity<List<MessageDTO>> getMessages(@PathVariable("username") String username) throws MessagingException, IOException, ParseException{
+	@GetMapping(value="/messagess/{username}/{sort}")
+	public ResponseEntity<List<MessageDTO>> getMessages(@PathVariable("username") String username,@PathVariable("sort") String sort) throws MessagingException, IOException, ParseException{
 		System.out.println("\n\nPokusavam naci poruke za: "+username+"<---------------------------------------\n");
+		System.out.println("\n\nSort: "+sort+"<---------------------------------------\n");
 		Account account=accountService.findByUsername(username.split("@")[0]);
 		GregorianCalendar dateTime=DateUtil.getLastOneHour();
 		System.out.println("\nUsername: "+account.getUsername());
@@ -60,7 +60,14 @@ public class MessageController {
 		}
 		System.out.println("Vreme poslednje poruke je:"+DateUtil.formatTimeWithSecond(dateTime));
 		ReadMail.receiveEmail(account.getSmtpAddress(), account.getInServerAddress(), account,dateTime,count,"INBOX",messageService);
-		List<MyMessage> messages= messageService.findByAccount(account);
+		List<MyMessage> messages=new ArrayList<MyMessage>();
+		if(sort.equals("subject")) {
+			messages= messageService.findByAccountOrderBySubjectAsc(account);
+		}else if(sort.equals("from")) {
+			messages= messageService.findByAccountOrderByFromAsc(account);
+		}else if(sort.equals("dateTime")) {
+			messages= messageService.findByAccountOrderByDateTimeAsc(account);
+		}
 		System.out.println("\n\n\n\nBroj poruka: "+messages.size());
 		List<MessageDTO> messagesDTO=new ArrayList<MessageDTO>();
 		for (MyMessage myMessage : messages) {

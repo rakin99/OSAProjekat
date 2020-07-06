@@ -24,7 +24,7 @@ public class MyMessage {
 	private long id;
 	
 	@Column(name="_from", unique=false, nullable=false)
-	private String _from;
+	private String from;
 	
 	@Column(name="_to", unique=false, nullable=true)
 	private String _to;
@@ -56,7 +56,7 @@ public class MyMessage {
 
 	public MyMessage() {
 		this.id=0;
-		this._from="";
+		this.from="";
 		this._to="";
 		this._cc="";
 		this._bcc="";
@@ -76,11 +76,11 @@ public class MyMessage {
 	}
 
 	public String get_from() {
-		return _from;
+		return from;
 	}
 
 	public void set_from(String _from) {
-		this._from = _from;
+		this.from = _from;
 	}
 
 	public String get_to() {
@@ -156,7 +156,7 @@ public class MyMessage {
 	}
 
 	public String toString() {
-	    return "(Message)[\nid="+id+",_from="+_from+",_to="+_to+",_cc="+_cc+",_bcc="+_bcc+",dateTime="+dateTime+
+	    return "(Message)[\nid="+id+",_from="+from+",_to="+_to+",_cc="+_cc+",_bcc="+_bcc+",dateTime="+dateTime+
 	    		",subject="+subject+",content="+content+",unread="+unread+"]";
 	  }
 }

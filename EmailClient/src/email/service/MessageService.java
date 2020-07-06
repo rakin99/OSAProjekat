@@ -25,8 +25,8 @@ public class MessageService implements MessageServiceInterface{
 	}
 	
 	@Override
-	public List<MyMessage> findByAccount(Account account){
-		return messageRepository.findByAccount(account);
+	public List<MyMessage> findByAccountOrderBySubjectAsc(Account account){
+		return messageRepository.findByAccountOrderBySubjectAsc(account);
 	}
 
 	@Override
@@ -54,5 +54,15 @@ public class MessageService implements MessageServiceInterface{
 	@Override
 	public List<MyMessage> findAllSentMessage(String username) {
 		return messageRepository.findAllSentMessage(username);
+	}
+
+	@Override
+	public List<MyMessage> findByAccountOrderByFromAsc(Account account) {
+		return messageRepository.findByAccountOrderByFromAsc(account);
+	}
+
+	@Override
+	public List<MyMessage> findByAccountOrderByDateTimeAsc(Account account) {
+		return messageRepository.findByAccountOrderByDateTimeAsc(account);
 	}
 }

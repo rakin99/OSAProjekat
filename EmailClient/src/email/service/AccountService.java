@@ -43,4 +43,9 @@ public class AccountService implements AccountServiceInterface{
 		return accountRepository.findByUser(user);
 	}
 
+	@Override
+	public Account findById(long id) {
+		return accountRepository.findById(id);
+	}
+
 }

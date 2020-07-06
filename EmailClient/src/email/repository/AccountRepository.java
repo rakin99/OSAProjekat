@@ -17,6 +17,8 @@ public interface AccountRepository extends JpaRepository<Account, Integer>{
 	Account findByUsername(String username);
 	Account findByPassword(String password);
 	
+	Account findById(long id);
+	
 	@Query("FROM Account WHERE username LIKE :username AND password LIKE concat(:password,'%')")
 	Account findByUsernameAndPassword(@Param("username") String username,@Param("password") String password);
 	

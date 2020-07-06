@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -74,13 +75,19 @@ public class AccountController {
 		return new ResponseEntity<AccountDTO>(new AccountDTO(account), HttpStatus.CREATED);
 	}
 	
-//	@GetMapping
-//	@RequestMapping(value = "/accounts/{username}")
-//	public ResponseEntity<AccountDTO> updateAccount(@PathVariable("username") String username){
-//		Account account=accountService.findByUsername(username);
-//		if(account!=null) {
-//			return new ResponseEntity<AccountDTO>(new AccountDTO(account), HttpStatus.OK);
-//		}
-//		return new ResponseEntity<AccountDTO>(HttpStatus.NOT_FOUND);
-//	}
+	@DeleteMapping(value="/accounts/{id}")
+	public ResponseEntity<Void> deleteMessage(@PathVariable("id") Long id){
+		System.out.println("\nPocinjem sa trazenjem accounta za brisanje! <----------------------------------------\n");
+		Account account = accountService.findById(id);
+		if (account != null){
+			System.out.println("\nPronasao sam account i sada pocinjem sa brisanjem! <------------------------------\n");
+			account.setActive(false);
+			accountService.save(account);
+			System.out.println("\nObrisao sam account! <------------------------------------------------------\n");
+			return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+		} else {	
+			System.out.println("Nisam uspeo da pronadjem account! <-----------------------------------------------");
+			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
+		}
+	}
 }

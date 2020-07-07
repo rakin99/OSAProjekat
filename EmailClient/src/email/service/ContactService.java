@@ -56,5 +56,20 @@ public class ContactService implements ContactServiceInterface{
 	public List<Contact> findByAccountOrderByLastNameAsc(Account account) {
 		return contactRepository.findByAccountOrderByLastNameAsc(account);
 	}
+	
+	@Override
+	public List<Contact> findByAccountOrderByDisplayNameDesc(Account account){
+		return contactRepository.findByAccountOrderByDisplayNameDesc(account);
+	}
+	
+	@Override
+	public List<Contact> findByAccountOrderByFirstNameDesc(Account account) {
+		return contactRepository.findByAccountOrderByFirstNameDesc(account);
+	}
+
+	@Override
+	public List<Contact> findByAccountOrderByLastNameDesc(Account account) {
+		return contactRepository.findByAccountOrderByLastNameDesc(account);
+	}
 
 }

@@ -23,4 +23,10 @@ public interface ContactServiceInterface {
 	
 	List<Contact> findByAccountOrderByLastNameAsc(Account account);
 	
+	List<Contact> findByAccountOrderByDisplayNameDesc(Account account);
+	
+	List<Contact> findByAccountOrderByFirstNameDesc(Account account);
+	
+	List<Contact> findByAccountOrderByLastNameDesc(Account account);
+	
 }

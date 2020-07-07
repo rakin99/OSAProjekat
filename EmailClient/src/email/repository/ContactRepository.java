@@ -20,10 +20,13 @@ public interface ContactRepository extends JpaRepository<Contact, Integer>{
 	Contact findById(long id);
 	
 	List<Contact> findByAccountOrderByDisplayNameAsc(Account account);
+	List<Contact> findByAccountOrderByDisplayNameDesc(Account account);
 	
 	List<Contact> findByAccountOrderByFirstNameAsc(Account account);
+	List<Contact> findByAccountOrderByFirstNameDesc(Account account);
 	
 	List<Contact> findByAccountOrderByLastNameAsc(Account account);
+	List<Contact> findByAccountOrderByLastNameDesc(Account account);
 	
 	@Query("FROM Contact WHERE _display_name LIKE concat('%',:username,'%')")
 	List<Contact> findAllContacts(@Param("username") String username);

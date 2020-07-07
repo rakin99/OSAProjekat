@@ -61,12 +61,19 @@ public class MessageController {
 		System.out.println("Vreme poslednje poruke je:"+DateUtil.formatTimeWithSecond(dateTime));
 		ReadMail.receiveEmail(account.getSmtpAddress(), account.getInServerAddress(), account,dateTime,count,"INBOX",messageService);
 		List<MyMessage> messages=new ArrayList<MyMessage>();
-		if(sort.equals("subject")) {
+		if(sort.equals("subject|asc")) {
 			messages= messageService.findByAccountOrderBySubjectAsc(account);
-		}else if(sort.equals("from")) {
+		}else if(sort.equals("from|asc")) {
 			messages= messageService.findByAccountOrderByFromAsc(account);
-		}else if(sort.equals("dateTime")) {
+		}else if(sort.equals("dateTime|asc")) {
 			messages= messageService.findByAccountOrderByDateTimeAsc(account);
+		}
+		else if(sort.equals("subject|desc")) {
+			messages= messageService.findByAccountOrderBySubjectDesc(account);
+		}else if(sort.equals("from|desc")) {
+			messages= messageService.findByAccountOrderByFromDesc(account);
+		}else if(sort.equals("dateTime|desc")) {
+			messages= messageService.findByAccountOrderByDateTimeDesc(account);
 		}
 		System.out.println("\n\n\n\nBroj poruka: "+messages.size());
 		List<MessageDTO> messagesDTO=new ArrayList<MessageDTO>();

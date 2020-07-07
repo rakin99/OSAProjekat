@@ -33,9 +33,15 @@ public interface MessageRepository extends JpaRepository<MyMessage, Integer>{
 	//@Query("FROM MyMessage WHERE account=id AND active=true")
 	List<MyMessage> findByAccountOrderBySubjectAsc(Account account);
 	
+	List<MyMessage> findByAccountOrderBySubjectDesc(Account account);
+	
 	List<MyMessage> findByAccountOrderByFromAsc(Account account);
 	
+	List<MyMessage> findByAccountOrderByFromDesc(Account account);
+	
 	List<MyMessage> findByAccountOrderByDateTimeAsc(Account account);
+	
+	List<MyMessage> findByAccountOrderByDateTimeDesc(Account account);
 	
 	@Query("FROM MyMessage WHERE _from LIKE concat('%',:username,'%')")
 	List<MyMessage> findAllSentMessage(@Param("username") String username);

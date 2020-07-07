@@ -18,6 +18,7 @@ public interface MessageServiceInterface {
 	GregorianCalendar getMaxDate(String username);
 	
 	List<MyMessage> findByAccountOrderBySubjectAsc(Account account);
+	List<MyMessage> findByAccountOrderBySubjectDesc(Account account);
 
 	int maxId();
 	
@@ -28,6 +29,8 @@ public interface MessageServiceInterface {
 	List<MyMessage> findAllSentMessage(String username);
 	
 	List<MyMessage> findByAccountOrderByFromAsc(Account account);
+	List<MyMessage> findByAccountOrderByFromDesc(Account account);
 	
 	List<MyMessage> findByAccountOrderByDateTimeAsc(Account account);
+	List<MyMessage> findByAccountOrderByDateTimeDesc(Account account);
 }

@@ -65,4 +65,19 @@ public class MessageService implements MessageServiceInterface{
 	public List<MyMessage> findByAccountOrderByDateTimeAsc(Account account) {
 		return messageRepository.findByAccountOrderByDateTimeAsc(account);
 	}
+
+	@Override
+	public List<MyMessage> findByAccountOrderBySubjectDesc(Account account) {
+		return messageRepository.findByAccountOrderBySubjectDesc(account);
+	}
+
+	@Override
+	public List<MyMessage> findByAccountOrderByFromDesc(Account account) {
+		return messageRepository.findByAccountOrderByFromDesc(account);
+	}
+
+	@Override
+	public List<MyMessage> findByAccountOrderByDateTimeDesc(Account account) {
+		return messageRepository.findByAccountOrderByDateTimeDesc(account);
+	}
 }

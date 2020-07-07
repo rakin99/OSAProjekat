@@ -1,8 +1,8 @@
-package service;
+package email.service;
 
 import org.springframework.stereotype.Component;
 
-import entity.Account;
+import email.entity.Account;
 
 @Component
 public interface AccountServiceInteface {

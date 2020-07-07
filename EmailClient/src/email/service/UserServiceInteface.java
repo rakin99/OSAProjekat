@@ -1,6 +1,6 @@
-package service;
+package email.service;
 
-import entity.User;
+import email.entity.User;
 
 public interface UserServiceInteface {
 	
